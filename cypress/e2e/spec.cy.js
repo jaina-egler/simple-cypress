@@ -1,0 +1,36 @@
+describe('Primeiro acesso ao site', () => {
+  it('Testa o input de 800 reais', () => {
+    cy.visit('https://dev-finance.netlify.app/')
+    cy.contains('+ Nova Transação').click()
+    cy.get('#description').type('Salário')
+    cy.get('#amount').type(800)
+    cy.get('#date').type('2023-05-12')
+    cy.contains('Salvar').click()
+    cy.contains('.income','R$ 800,00')
+  })
+  it('Testa o remove de 500 reais', () => {
+    cy.visit('https://dev-finance.netlify.app/')
+    cy.contains('+ Nova Transação').click()
+    cy.get('#description').type('Fatura')
+    cy.get('#amount').type(-500)
+    cy.get('#date').type('2023-05-12')
+    cy.contains('Salvar').click()
+    cy.contains('.expense','-R$ 500,00')
+  })
+  it('Testa se o total fica correto após a adição de 800 reais e depois remoção de 500', () => {
+    cy.visit('https://dev-finance.netlify.app/')
+    // Inserindo 800 reais
+    cy.contains('+ Nova Transação').click()
+    cy.get('#description').type('Salário')
+    cy.get('#amount').type(800)
+    cy.get('#date').type('2023-05-12')
+    cy.contains('Salvar').click()
+    // Removendo 500 reais
+    cy.contains('+ Nova Transação').click()
+    cy.get('#description').type('Fatura')
+    cy.get('#amount').type(-500)
+    cy.get('#date').type('2023-05-12')
+    cy.contains('Salvar').click()
+    cy.contains('#totalDisplay',300)
+  })
+})
